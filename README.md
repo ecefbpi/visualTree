@@ -40,7 +40,7 @@ The four main tool parts are:
 
 In the first area (Data loading and tree building control part) there are two tabs. The first one is for the data loading and the second one is for the tree building. In the next figure it can be seen a detailed view of the two of them:
 
-![Data Loading](./assets/data_loading.JPG) ![Tree Building](./assets/tree_building.JPG)
+![Data Loading](./assets/data_loading_1.jpg) ![Tree Building](./assets/tree_building_1.jpg)
 
 In the second area of the interface is where the visualizations are shown. On one hand, we can see the projection of the data in the bidimensional space produced by the LDA in combination with the SC axes that result from making both projections to match.
 
