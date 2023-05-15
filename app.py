@@ -102,35 +102,40 @@ def toggle_modal(n1, n2, is_open):
 # ==== CALLBACKS FOR UPLOAD FILE ====
 
 # Save the dataframe in hidden Div
-@app.callback(Output('dataframe', 'children'),
-              [Input('upload-data', 'contents'),
-               Input('upload-data', 'filename'),
-               Input('field-sep', 'value')])
-def generate_df(contents, filename, separator):
+@app.callback([Output('dataframe', 'children'),
+              Output('seed', 'children'),
+              Output('upload-data', 'disabled'),
+              Output('file-name', 'children')],
+              [Input('upload-data', 'n_clicks')],
+               )
+def generate_df(clicks):
 
-    if contents is not None:
-        full_df = parse_file(contents, filename, separator)
+    if clicks is not None and clicks == 1:
+        full_df = parse_file('./wine_dataframe.csv', ',')
         if full_df is not None:
             full_df = full_df.reset_index(level=0, drop=False)
-            return full_df.to_json( orient='split')
+            now = datetime.datetime.now()
+            seed = now.hour * 10000 + now.minute * 100 + now.second
+
+            return full_df.to_json( orient='split'), seed, True, 'wine_dataframe.csv'
 
 #Fix seed when dataset is loaded
-@app.callback(Output('seed', 'children'),
-              [Input('upload-data', 'filename')])
-def create_seed(filename):
-
-    if filename is not None:
-        now = datetime.datetime.now()
-        seed = now.hour*10000+now.minute*100+now.second
-        return seed
+# @app.callback(Output('seed', 'children'),
+#               [Input('upload-data', 'filename')])
+# def create_seed(filename):
+#
+#     if filename is not None:
+#         now = datetime.datetime.now()
+#         seed = now.hour*10000+now.minute*100+now.second
+#         return seed
 
 # Show uploaded file name
-@app.callback(Output('file-name', 'children'),
-              [Input('upload-data', 'filename')])
-def update_filename(name):
-
-    if name is not None:
-        return name
+# @app.callback(Output('file-name', 'children'),
+#               [Input('upload-data', 'filename')])
+# def update_filename(name):
+#
+#     if name is not None:
+#         return name
 
 # ==== CALLBACKS FOR TARGET FEATURE SELECTION ====
 
@@ -1413,14 +1418,14 @@ def showSklearnTable(class_dict_jsonified):
                 )
             ]
 
-@app.callback(Output('export-button', 'disabled'),
-              [Input('own-card', 'children'),
-               Input('sklearn-card', 'children')])
-def disable_export_button(own_card, sklearn_card):
-    if len(own_card) == 0 or len(sklearn_card) == 0:
-        return True
-    else:
-        return False
+# @app.callback(Output('export-button', 'disabled'),
+#               [Input('own-card', 'children'),
+#                Input('sklearn-card', 'children')])
+# def disable_export_button(own_card, sklearn_card):
+#     if len(own_card) == 0 or len(sklearn_card) == 0:
+#         return True
+#     else:
+#         return False
 
 @app.callback(
     Output("modal_export", "is_open"),

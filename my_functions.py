@@ -49,16 +49,18 @@ def make_axis(axis, columns):
         )
     return axis_lines, axis_labels
 
-def parse_file(contents, filename, separator):
+def parse_file(filename, separator):
 
-    content_type, content_string = contents.split(',')
-    decoded = base64.b64decode(content_string)
-    try:
-        if 'csv' in filename:
-            df = pd.read_csv(io.StringIO(decoded.decode('utf-8')),sep=separator)
-    except Exception as e:
-        print(e)
-        return None
+    with open(filename, 'r') as f:
+        df = pd.read_csv(filename, sep=separator)
+    # content_type, content_string = contents.split(',')
+    # decoded = base64.b64decode(content_string)
+    # try:
+    #     if 'csv' in filename:
+    #         df = pd.read_csv(io.StringIO(decoded.decode('utf-8')),sep=separator)
+    # except Exception as e:
+    #     print(e)
+    #     return None
     return df
 
 def split_train_test(df_full, targetFeature, trainValue, seed):

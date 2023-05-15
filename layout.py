@@ -11,12 +11,15 @@ import dash_cytoscape as cyto
 INFO_MODAL = "This tool is designed to help users to manually build a decision tree classifier based on their domain knowledge.\n\n" \
 "The idea behind this tool is described in the research article: 'Visually guided classification trees for analyzing chronic patients' " \
 "(Cristina Soguero-Ruiz, Inmaculada Mora-Jiménez, Miguel A. Mohedano-Munoz, Manuel Rubio-Sanchez, Pablo de Miguel-Bohoyo, and Alberto Sanchez).\n\n" \
+"This is a demo version with not all functionality available. One cannot upload any dataset to be loaded (only one is available to be used) " \
+"and the Export function to generate PDF versions of the decision trees is neither available.\n\n" \
 "The tool has two main parts. In the upper one, on the left side there are two tabs, one to load the CSV file, chose the target class, " \
 "the features to use and the percentage of the dataframe to be used as training set. On the right tab, we have the controls to build the decision tree. " \
 "One can chose the feature to partition a tree node and the tool will find the threshold value (using C4.5 algorithm) so the information gain is " \
 "maximized. The buttons to partition a node (once the feature is chosen) and to remove the children of the selected node, are " \
 "both located below chosen parameter drop-down control. " \
 "Besides, the main characteristics of each node are shown and finally one button to force a node to be a leaf (and another one to revert back that action).\n\n" \
+"The user must load the data using the button, select the target feature (class in this case) and set a training-test percentage using the knob.\n\n" \
 "One node is a leaf if its entropy is zero (probability of one class is 1) or if the user forces the node to be a leaf. " \
 "Only when all the nodes without children are leaf, classification can be executed.\n" \
 "In the bottom part of the tool, we have the classification controls. On the left side, one can tune the main parameters " \
@@ -84,15 +87,16 @@ DATA_TAB = dbc.Tab(
         html.H4(children="Upload and prepare data", className="display-5 mt-5"),
         html.Hr(className="my-2"),
         html.Label("Upload data", className="lead mb-2"),
-        dcc.Upload(
+        html.Div(
             [
                 dbc.Button(
-                    "Upload",
+                    "Upload Data",
                     color='primary',
                     className='mr-1',
                     style={
                         'display': 'inline-block'
-                    }
+                    },
+                    id='upload-data'
                 ),
                 html.Label(
                     children=[],
@@ -105,7 +109,6 @@ DATA_TAB = dbc.Tab(
 
                 )
             ],
-            id='upload-data',
             className='mb-2'
         ),
         dbc.FormGroup(
@@ -118,6 +121,7 @@ DATA_TAB = dbc.Tab(
                         value=',',
                         maxLength=1,
                         bs_size='sm',
+                        disabled=True,
                     ),
                     width=2
                 )
